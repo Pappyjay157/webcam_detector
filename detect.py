@@ -251,6 +251,13 @@ def run(
                     n = (det[:, 5] == c).sum()  # detections per class
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
 
+                from collections import Counter
+
+                labels = [names[int(cls)] for *xyxy, conf, cls in reversed(det)]
+                summary = Counter(labels)
+                summary_str = ", ".join(f"{v} {k}{'s' if v > 1 else ''}" for k, v in summary.items())
+                print(f"Detected: {summary_str}")
+
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
                     c = int(cls)  # integer class
